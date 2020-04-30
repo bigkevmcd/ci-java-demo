@@ -1,9 +1,11 @@
-build-image:
+image: maven:3-openjdk-11
+
+build-jar:
   rules:
     - if: vars.CI_COMMIT_BRANCH != 'master'
       when: never
-  tekton:
-    taskRef: buildah
-    params:
-     - name: IMAGE
-       expr: "'quay.io/bigkevmcd/java-demo:master-' + vars.CI_COMMIT_SHORT_SHA"
+  script:
+    - mvn clean package
+  artifacts:
+    paths:
+      - ./build/target/ci-demo-0.0.1-SNAPSHOT.jar
