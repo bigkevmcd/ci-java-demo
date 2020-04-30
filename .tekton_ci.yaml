@@ -1,11 +1,12 @@
-image: maven:3-openjdk-11
+image: quay.io/buildah/stable:v1.11.0
 
-build-jar:
+variables:
+  IMAGE: 'quay.io/bigkevmcd/java-demo:master-' + vars.CI_COMMIT_SHORT_SHA
+
+build-image:
   rules:
     - if: vars.CI_COMMIT_BRANCH != 'master'
       when: never
   script:
-    - mvn clean package
-  artifacts:
-    paths:
-      - ./build/target/ci-demo-0.0.1-SNAPSHOT.jar
+    - buildah bud --format=oci --layers -f ./Dockerfile -t $IMAGE .
+    - buildah push $IMAGE docker://$IMAGE
