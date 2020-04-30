@@ -1,10 +1,4 @@
-image: adoptopenjdk/openjdk11-openj9:jre-11.0.7_10_openj9-0.20.0-alpine
-
-stages:
-  - image
-
 build-image:
-  stage: image
   rules:
     - if: vars.CI_COMMIT_BRANCH != 'master'
       when: never
